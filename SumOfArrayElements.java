@@ -4,15 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SumOfArrayElements implements Runnable {
-	private int[] initialArray;
+	private int[] countedArray;
 	private int sumOfArrayElements;
+	private long timeSpent;
 
 	public SumOfArrayElements() {
 
 	}
 
-	public SumOfArrayElements(int[] initialArray) {
-		this.initialArray = initialArray;
+	public SumOfArrayElements(int[] countedArray) {
+		this.countedArray = countedArray;
+	}
+
+	
+	public long getTimeSpent() {
+		return timeSpent;
 	}
 
 	public int getSumOfArrayElements() {
@@ -27,7 +33,7 @@ public class SumOfArrayElements implements Runnable {
 	}
 
 	public List<int[]> divideArrayToFour(int[] initialArray) {
-
+		long startTime = System.currentTimeMillis();
 		List<int[]> dividedArrays = new ArrayList<int[]>();
 		int quarterOfArrayLength = initialArray.length / 4;
 
@@ -52,9 +58,9 @@ public class SumOfArrayElements implements Runnable {
 		return dividedArrays;
 	}
 
-	public int getSumSimpleAlgorytm(int[] initialArray) {
+	public int getSumSimpleAlgorytm(int[] countedArray) {
 		int arraySum = 0;
-		for (int arrayCounter : initialArray) {
+		for (int arrayCounter : countedArray) {
 			arraySum = arraySum + arrayCounter;
 		}
 		return arraySum;
@@ -62,10 +68,7 @@ public class SumOfArrayElements implements Runnable {
 
 	@Override
 	public void run() {
-		System.out.println("-------------------");
-		showArray(initialArray);
-		this.sumOfArrayElements = getSumSimpleAlgorytm(initialArray);
-		System.out.println("Sum = " + sumOfArrayElements);
+		this.sumOfArrayElements = getSumSimpleAlgorytm(countedArray);
 	}
 
 }

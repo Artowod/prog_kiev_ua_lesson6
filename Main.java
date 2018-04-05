@@ -1,6 +1,8 @@
 package ua.prog.java.lesson6;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 
@@ -19,47 +21,42 @@ public class Main {
 		/* часть 2 - подсчета суммы элементов массива целых чисел */
 
 		SumOfArrayElements instanceOfSOAE = new SumOfArrayElements();
-
-		int arrayLength = 21;
+		long startTime = System.currentTimeMillis();
+		int arrayLength = 200000000;
 		int[] initialArray = new int[arrayLength];
 		for (int arrayElement = 0; arrayElement < arrayLength; arrayElement++) {
-			initialArray[arrayElement] = (int) (Math.random() * 10);
-			System.out.print(initialArray[arrayElement] + ", ");
+			initialArray[arrayElement] = (int) (Math.random() * 1000);
 		}
-		System.out.println();
+		long timeSpent = System.currentTimeMillis() - startTime;
+		System.out.println("¬рем€ генерировани€ начального массива из " + arrayLength + " элементов: "  + timeSpent+ " ms");
+		
+		long startTimeDividingArrayToFour = System.currentTimeMillis();
+		List<int[]> dividedArrayToFour = instanceOfSOAE.divideArrayToFour(initialArray);
+		long timeSpentDividingArrayToFour = System.currentTimeMillis() - startTimeDividingArrayToFour;
+		System.out.println("¬рем€ разбити€ массива на потоки: "  + timeSpentDividingArrayToFour+ " ms");
 
-		for (int[] partOfArray : instanceOfSOAE.divideArrayToFour(initialArray)) {
-			Thread thread = new Thread(new SumOfArrayElements(partOfArray));
+		long startTimeCountingSum = System.currentTimeMillis();
+		int arraySumUsingThreads = 0;
+		for (int[] partOfArray : dividedArrayToFour) {
+			SumOfArrayElements ss = new SumOfArrayElements(partOfArray);
+			Thread thread = new Thread(ss);
 			thread.start();
 			try {
 				thread.join();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-
+			arraySumUsingThreads += ss.getSumOfArrayElements();
 		}
+		long timeSpentCountingSum = System.currentTimeMillis() - startTimeCountingSum;
+		System.out.println("¬рем€ выполнени€ подсчЄта в четыре потока: "  + timeSpentCountingSum + " ms");
 
-		// Thread firstThread = new Thread(new
-		// SumOfArrayElements(SumOfArrayElements.firstPartOfArray));
-		// Thread secondThread = new Thread(new SumOfArrayElements(secondPartOfArray));
-		// Thread thirdThread = new Thread(new SumOfArrayElements(thirdPartOfArray));
-		// Thread fourthThread = new Thread(new SumOfArrayElements(fourthPartOfArray));
-		// firstThread.start();
-		// secondThread.start();
-		// thirdThread.start();
-		// fourthThread.start();
-
-		// try {
-		// Thread currThread = Thread.currentThread();
-		// currThread.sleep(1000);
-		// } catch (InterruptedException ex) {
-		// ex.getStackTrace();
-		// }
-
-		// System.out.println("—умма элементов массива, использу€ многопоточность: ");
-		System.out.println("-------------------");
-		System.out
-				.println("—умма элементов массива в один поток: " + instanceOfSOAE.getSumSimpleAlgorytm(initialArray));
-
+		System.out.println("—умма элементов массива, использу€ многопоточность: " + arraySumUsingThreads);
+		
+		startTime = System.currentTimeMillis();
+		int sumSimpleAlgorytm = instanceOfSOAE.getSumSimpleAlgorytm(initialArray); 
+		timeSpent = System.currentTimeMillis() - startTime;
+		System.out.println("—умма элементов массива в один поток: " + sumSimpleAlgorytm);
+		System.out.println("¬рем€ выполнени€ подсчЄта в один поток: " + timeSpent+ "ms");
 	}
 }
