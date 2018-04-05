@@ -16,7 +16,6 @@ public class SumOfArrayElements implements Runnable {
 		this.countedArray = countedArray;
 	}
 
-	
 	public long getTimeSpent() {
 		return timeSpent;
 	}
@@ -25,15 +24,7 @@ public class SumOfArrayElements implements Runnable {
 		return sumOfArrayElements;
 	}
 
-	private void showArray(int[] array) {
-		for (int i : array) {
-			System.out.print(i + ", ");
-		}
-		System.out.println();
-	}
-
 	public List<int[]> divideArrayToFour(int[] initialArray) {
-		long startTime = System.currentTimeMillis();
 		List<int[]> dividedArrays = new ArrayList<int[]>();
 		int quarterOfArrayLength = initialArray.length / 4;
 

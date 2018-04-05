@@ -1,7 +1,5 @@
 package ua.prog.java.lesson6;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
@@ -28,12 +26,13 @@ public class Main {
 			initialArray[arrayElement] = (int) (Math.random() * 1000);
 		}
 		long timeSpent = System.currentTimeMillis() - startTime;
-		System.out.println("Время генерирования начального массива из " + arrayLength + " элементов: "  + timeSpent+ " ms");
-		
+		System.out.println(
+				"Время генерирования начального массива из " + arrayLength + " элементов: " + timeSpent + " ms");
+
 		long startTimeDividingArrayToFour = System.currentTimeMillis();
 		List<int[]> dividedArrayToFour = instanceOfSOAE.divideArrayToFour(initialArray);
 		long timeSpentDividingArrayToFour = System.currentTimeMillis() - startTimeDividingArrayToFour;
-		System.out.println("Время разбития массива на потоки: "  + timeSpentDividingArrayToFour+ " ms");
+		System.out.println("Время разбития массива на потоки: " + timeSpentDividingArrayToFour + " ms");
 
 		long startTimeCountingSum = System.currentTimeMillis();
 		int arraySumUsingThreads = 0;
@@ -49,14 +48,14 @@ public class Main {
 			arraySumUsingThreads += ss.getSumOfArrayElements();
 		}
 		long timeSpentCountingSum = System.currentTimeMillis() - startTimeCountingSum;
-		System.out.println("Время выполнения подсчёта в четыре потока: "  + timeSpentCountingSum + " ms");
+		System.out.println("Время выполнения подсчёта в четыре потока: " + timeSpentCountingSum + " ms");
 
 		System.out.println("Сумма элементов массива, используя многопоточность: " + arraySumUsingThreads);
-		
+
 		startTime = System.currentTimeMillis();
-		int sumSimpleAlgorytm = instanceOfSOAE.getSumSimpleAlgorytm(initialArray); 
+		int sumSimpleAlgorytm = instanceOfSOAE.getSumSimpleAlgorytm(initialArray);
 		timeSpent = System.currentTimeMillis() - startTime;
 		System.out.println("Сумма элементов массива в один поток: " + sumSimpleAlgorytm);
-		System.out.println("Время выполнения подсчёта в один поток: " + timeSpent+ "ms");
+		System.out.println("Время выполнения подсчёта в один поток: " + timeSpent + "ms");
 	}
 }
