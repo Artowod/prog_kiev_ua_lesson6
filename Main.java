@@ -8,6 +8,8 @@ public class Main {
 
 		/* часть 1 - поиск факториала */
 		/*
+		 * System.out.println("Домашнее задание, часть 1:");
+		 * 
 		 * for (int factorialOf = 0; factorialOf <= 100; factorialOf++) { Thread
 		 * currentThread = new Thread(new FindFactorial(factorialOf));
 		 * currentThread.start(); }
@@ -17,8 +19,8 @@ public class Main {
 		 */
 
 		/* часть 2 - подсчета суммы элементов массива целых чисел */
+		System.out.println("Домашнее задание, часть 2:");
 
-		SumOfArrayElements instanceOfSOAE = new SumOfArrayElements();
 		long startTime = System.currentTimeMillis();
 		int arrayLength = 200000000;
 		int[] initialArray = new int[arrayLength];
@@ -30,22 +32,30 @@ public class Main {
 				"Время генерирования начального массива из " + arrayLength + " элементов: " + timeSpent + " ms");
 
 		long startTimeDividingArrayToFour = System.currentTimeMillis();
+		SumOfArrayElements instanceOfSOAE = new SumOfArrayElements();
 		List<int[]> dividedArrayToFour = instanceOfSOAE.divideArrayToFour(initialArray);
 		long timeSpentDividingArrayToFour = System.currentTimeMillis() - startTimeDividingArrayToFour;
 		System.out.println("Время разбития массива на потоки: " + timeSpentDividingArrayToFour + " ms");
 
 		long startTimeCountingSum = System.currentTimeMillis();
 		int arraySumUsingThreads = 0;
+		Thread[] arrayOfThreads = new Thread[4];
+		int a = 0;
 		for (int[] partOfArray : dividedArrayToFour) {
-			SumOfArrayElements ss = new SumOfArrayElements(partOfArray);
-			Thread thread = new Thread(ss);
+			SumOfArrayElements instanceOfSOAEInThread = new SumOfArrayElements(partOfArray);
+			Thread thread = new Thread(instanceOfSOAEInThread);
+			arrayOfThreads[a++] = thread;
 			thread.start();
-			try {
-				thread.join();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			arraySumUsingThreads += ss.getSumOfArrayElements();
+			arraySumUsingThreads += instanceOfSOAEInThread.getSumOfArrayElements();
+		}
+		try {
+			arrayOfThreads[0].join();
+			arrayOfThreads[1].join();
+			arrayOfThreads[2].join();
+			arrayOfThreads[3].join();
+
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 		long timeSpentCountingSum = System.currentTimeMillis() - startTimeCountingSum;
 		System.out.println("Время выполнения подсчёта в четыре потока: " + timeSpentCountingSum + " ms");
@@ -57,5 +67,15 @@ public class Main {
 		timeSpent = System.currentTimeMillis() - startTime;
 		System.out.println("Сумма элементов массива в один поток: " + sumSimpleAlgorytm);
 		System.out.println("Время выполнения подсчёта в один поток: " + timeSpent + "ms");
+
+		/* Часть 3 - копирование файлов */
+		/*
+		 * System.out.println("Домашнее задание, часть 3:");
+		 * 
+		 * FileOperation operations = new FileOperation();
+		 * operations.copyFiles("C:/Java/SourceFolder", "C:/Java/DestinationFolder");
+		 * System.out.println("Скопировано.");
+		 */
+
 	}
 }
