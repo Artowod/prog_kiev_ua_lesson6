@@ -1,17 +1,7 @@
 package ua.prog.java.lesson6;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.Scanner;
 
 public class FileOperation {
 
@@ -22,37 +12,47 @@ public class FileOperation {
 	private File[] filesList(String sourceFolderPath) {
 		File folder = new File(sourceFolderPath);
 		File[] filesList = folder.listFiles();
-		for (File file : filesList) {
-			// System.out.println(file);
-			// System.out.println(file.getName());
-		}
+//		for (File file : filesList) {
+//			 System.out.println(file);
+//			 System.out.println(file.getName());
+//		}
 		return filesList;
 	}
 
 	public void copyFiles(String sourceFolderPath, String DestinationFolderPatch, int threadsQuantity) {
 		File[] filesListSourceFolder = filesList(sourceFolderPath);
-		
-//		for()
+		Thread[] copyFilesThreadsArray = new Thread[threadsQuantity];
+		for (int i = 0; i < threadsQuantity; i++) {
 			CopyFiles instanceOfCopyFiles = new CopyFiles(filesListSourceFolder, DestinationFolderPatch);
 			Thread copyFilesThread = new Thread(new Thread(instanceOfCopyFiles));
-			
-			
-		
-		
-		for (File sourceFile : filesListSourceFolder) {
-			try (FileInputStream fis = new FileInputStream(sourceFile.getAbsolutePath());
-					FileOutputStream fos = new FileOutputStream(DestinationFolderPatch + "/" + sourceFile.getName())) {
-				byte[] bufer = new byte[1024];
-				int byteread = 0;
-				for (; (byteread = fis.read(bufer)) > 0;) {
-					fos.write(bufer, 0, byteread);
-				}
-			} catch (IOException e) {
-				System.out.println("Something wrong with CopyFiles " + e);
-			}
-
+			copyFilesThreadsArray[i] = copyFilesThread;
+			copyFilesThread.start();
 		}
+		for (int i = 0; i < threadsQuantity; i++) {
+			try {
+				copyFilesThreadsArray[i].join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		System.out.println("Copy of files has been completed!");
+	}
 
+	public void folderMonitor(String sourceFolderPath) {
+		MonitorFolder instanceOfCopyFiles = new MonitorFolder(sourceFolderPath);
+		Thread monitorFolderThread = new Thread(new Thread(instanceOfCopyFiles));
+		monitorFolderThread.setDaemon(true);
+		monitorFolderThread.start();
+		
+		System.out.println("the defined catalogue is being monitored now ...");
+		System.out.println("to initiate the Exit please press 0 ");
+		for (;;) {
+			Scanner in = new Scanner(System.in);
+			if (in.nextLine().equals("0")) {
+				break;
+			}
+		}
+		System.out.println("End.");
 	}
 
 }
